@@ -1,4 +1,4 @@
-package trainingxyz;
+package trainingxyz.old;
 
 import org.junit.jupiter.api.Test;
 

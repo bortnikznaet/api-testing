@@ -9,18 +9,17 @@ public class Product {
     private int category_id;
     private String category_name;
 
-    public Product(){};
+    public Product() {
+    }
 
-    public Product(String name, String description, double price, int category_id){
+    public Product(String name, String description, double price, int category_id) {
         setName(name);
         setDescription(description);
         setPrice(price);
         setCategory_id(category_id);
     }
 
-    //used for PUT
-
-    public Product(int id, String name, String description, double price, int category_id){
+    public Product(int id, String name, String description, double price, int category_id) {
         setId(id);
         setName(name);
         setDescription(description);
@@ -28,7 +27,7 @@ public class Product {
         setCategory_id(category_id);
     }
 
-    public Product(int id, String name, String description, double price, int category_id, String category_name){
+    public Product(int id, String name, String description, double price, int category_id, String category_name) {
         setId(id);
         setName(name);
         setDescription(description);
@@ -38,7 +37,7 @@ public class Product {
     }
 
 
-    public Product(int id){
+    public Product(int id) {
         setId(id);
     }
 
