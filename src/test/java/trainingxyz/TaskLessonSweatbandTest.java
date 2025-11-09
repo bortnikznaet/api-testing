@@ -6,18 +6,19 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import trainingxyz.support.api.endpoints.*;
+import trainingxyz.support.api.ApiHelper;
+import trainingxyz.support.api.v1.*;
 import trainingxyz.support.api.service.LastProductService;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class LayerSweatbandTest {
-    ReadOneProductAPI oneProduct = new ReadOneProductAPI();
-    CreateProductAPI createProductAPI = new CreateProductAPI();
-    UpdateProductAPI updateProductAPI = new UpdateProductAPI();
-    DeleteProductAPI deleteProductAPI = new DeleteProductAPI();
+public class TaskLessonSweatbandTest extends ApiHelper {
+    ReadOneProductApi oneProduct = new ReadOneProductApi();
+    CreateProductApi createProductAPI = new CreateProductApi();
+    UpdateProductApi updateProductAPI = new UpdateProductApi();
+    DeleteProductApi deleteProductAPI = new DeleteProductApi();
     LastProductService lastProductID = new LastProductService();
 
     @Test

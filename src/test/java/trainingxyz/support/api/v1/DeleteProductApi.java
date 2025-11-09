@@ -1,15 +1,13 @@
-package trainingxyz.support.api.endpoints;
+package trainingxyz.support.api.v1;
 
 import io.restassured.response.Response;
 import models.Product;
 import trainingxyz.support.api.ApiHelper;
 import trainingxyz.support.api.Endpoint;
 
-public class DeleteProductAPI {
-    ApiHelper api = new ApiHelper();
+public class DeleteProductApi extends ApiHelper {
 
     public Response delete(Product productId) {
-        return api
-                .delete(Endpoint.DELETE.path, productId);
+        return delete(Endpoint.DELETE.path, productId);
     }
 }

@@ -1,9 +1,19 @@
-# API Testing TAF (Rest-Assured + JUnit)
+# API Testing TAF (Rest-Assured + JUnit + Cucumber)
 
 **Test Automation Framework** for testing CRUD endpoints of a demo PHP API (MAMP).
 
-The framework has been updated and split into clean layers (helpers, endpoints, services, tests).
-<br> Legacy tests from the first publication were preserved and moved to the OLD package.
+The framework is built using a layered architecture (helpers, endpoints, services, tests)
+and includes both classic JUnit tests and BDD scenarios with Cucumber.
+
+---
+
+## ✨ Key Features
+
+- CRUD tests for the demo PHP API (`product` endpoints)
+- Layered structure: **support / endpoints / services / tests**
+- Separate Cucumber steps with **a single assertion per step** and meaningful failure messages
+- Verification of HTTP headers for the `GET` request (`ResponseHeaderTest` class)
+- The main assertion library in new tests is **AssertJ** (for readable failure messages)
 
 ---
 
@@ -12,6 +22,7 @@ The framework has been updated and split into clean layers (helpers, endpoints, 
 - **Java** 11+
 - **Maven** 3.9+
 - **JUnit**, **Rest-Assured**, **AssertJ**
+- **Cucumber JVM** (JUnit Platform engine)
 - OS: Windows / macOS / Linux
 
 ---
@@ -32,6 +43,12 @@ The framework has been updated and split into clean layers (helpers, endpoints, 
 Basic run:
 
 ```bash
-mvn -Dtest=LayerTest test
-mvn -Dtest=LayerSweatbandTest test
+mvn -Dtest=ProductApiCrudTest test
+mvn -Dtest=TaskLessonSweatbandTest test
+mvn -Dtest=ResponseHeaderTest test 
+```
+
+Cucumber run:
+```bash
+mvn -Dtest=CucumberRunTest test
 ```

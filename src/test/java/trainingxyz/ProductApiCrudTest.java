@@ -6,17 +6,17 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import trainingxyz.support.api.endpoints.*;
+import trainingxyz.support.api.v1.*;
 import trainingxyz.support.api.service.LastProductService;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class LayerTest {
-    ReadCategoriesAPI categoriesAPI = new ReadCategoriesAPI();
-    ReadProductsAPI allProductsAPI = new ReadProductsAPI();
-    ReadOneProductAPI oneProduct = new ReadOneProductAPI();
-    CreateProductAPI createProductAPI = new CreateProductAPI();
-    UpdateProductAPI updateProductAPI = new UpdateProductAPI();
-    DeleteProductAPI deleteProductAPI = new DeleteProductAPI();
+public class ProductApiCrudTest {
+    ReadCategoriesApi categoriesAPI = new ReadCategoriesApi();
+    ReadProductsApi allProductsAPI = new ReadProductsApi();
+    ReadOneProductApi oneProduct = new ReadOneProductApi();
+    CreateProductApi createProductAPI = new CreateProductApi();
+    UpdateProductApi updateProductAPI = new UpdateProductApi();
+    DeleteProductApi deleteProductAPI = new DeleteProductApi();
     LastProductService lastProductID = new LastProductService();
 
     @Test()
@@ -57,7 +57,7 @@ public class LayerTest {
         Product product = new Product(
                 "Water Bottle",
                 "Blue water bottle. Holds 64 ounces",
-                14,
+                1000,
                 3
         );
 
@@ -66,6 +66,8 @@ public class LayerTest {
                 .then()
                 .assertThat()
                 .statusCode(201);
+
+        response.then().log().body();
     }
 
     @Test
