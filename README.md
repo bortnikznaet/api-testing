@@ -14,16 +14,23 @@ and includes both classic JUnit tests and BDD scenarios with Cucumber.
 - Separate Cucumber steps with **a single assertion per step** and meaningful failure messages
 - Verification of HTTP headers for the `GET` request (`ResponseHeaderTest` class)
 - The main assertion library in new tests is **AssertJ** (for readable failure messages)
+- **Detailed logging** of HTTP requests/responses and Cucumber steps (Log4j2 + Rest-Assured filters)
+- **ReportPortal integration** for centralized reporting and log analysis
 
 ---
 
 ## 🔧 Tech Stack & Requirements
 
-- **Java** 11+
+- **Java** 17
 - **Maven** 3.9+
 - **JUnit**, **Rest-Assured**, **AssertJ**
 - **Cucumber JVM** (JUnit Platform engine)
-- OS: Windows / macOS / Linux
+- **Rest-Assured**
+- **AssertJ**
+- **Log4j2**
+- **ReportPortal** Java agent & logging libraries
+
+OS: Windows / macOS / Linux
 
 ---
 
@@ -38,15 +45,50 @@ and includes both classic JUnit tests and BDD scenarios with Cucumber.
 
 ---
 
+## 🧾 Logging
+
+The project is configured to log both HTTP calls and high-level test steps.
+
+- **HTTP logging** (Rest-Assured filters):
+    - Logs request/response details: method, URL, headers, cookies, body, status code.
+- **Step-level logging** (Log4j2):
+    - Each Cucumber step logs what it is doing and what is being asserted.
+
+Logs are written to:
+
+- **Console**
+- **File:** `target/logs/Api.log`
+- (optionally) **ReportPortal** via Log4j2 appender
+
+Log configuration is defined in:  
+`src/test/resources/log4j2.xml`
+
+---
+
+## 📊 ReportPortal Integration
+
+The framework is integrated with **ReportPortal** using:
+
+- `agent-java-cucumber7` (Cucumber + JUnit 5 agent)
+- `logger-java-log4j` (Log4j2 appender for RP)
+- `logger-java-rest-assured` (Rest-Assured logging to RP)
+
+Cucumber runner: `runner.CucumberRunTest`  
+Cucumber plugin for RP: `com.epam.reportportal.cucumber.ScenarioReporter`
+
+To enable ReportPortal, create `src/test/resources/reportportal.properties`:
+
+```properties
+rp.endpoint = https://<your-reportportal-host>
+rp.api.key = <your_personal_api_key>
+rp.project = <your_project_name>
+rp.launch = api-tests
+rp.enable = true
+```
+---
+
 ## ▶️ Test Execution
 
-Basic run:
-
-```bash
-mvn -Dtest=ProductApiCrudTest test
-mvn -Dtest=TaskLessonSweatbandTest test
-mvn -Dtest=ResponseHeaderTest test 
-```
 
 Cucumber run:
 ```bash

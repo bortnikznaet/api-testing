@@ -41,3 +41,8 @@ Feature: View CRUD endpoints of a demo PHP API (MAMP)
     When Send DELETE request to delete product
     Then Status code should be 200
     And Message should be "Product was deleted."
+
+  @CRUD6
+  Scenario: Get product by id returns expected headers
+    When Send GET request to read product with id 1
+    Then Response should contain expected headers for product read API

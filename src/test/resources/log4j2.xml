@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c{1} - %msg%n%throwable"/>
+        </Console>
+
+        <ReportPortalLog4j2Appender name="ReportPortalAppender">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c{1} - %msg%n%throwable"/>
+        </ReportPortalLog4j2Appender>
+
+        <File name="File"
+              fileName="target/logs/Api.log"
+              append="true">
+            <PatternLayout>
+                <Pattern>%d %-5p %c{2} [%t] %m%n</Pattern>
+            </PatternLayout>
+        </File
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="ReportPortalAppender"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+</Configuration>
