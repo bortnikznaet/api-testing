@@ -17,7 +17,7 @@
             <PatternLayout>
                 <Pattern>%d %-5p %c{2} [%t] %m%n</Pattern>
             </PatternLayout>
-        </File
+        </File>
     </Appenders>
 
     <Loggers>
