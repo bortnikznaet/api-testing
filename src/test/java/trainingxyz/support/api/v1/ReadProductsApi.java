@@ -4,9 +4,13 @@ import io.restassured.response.Response;
 import trainingxyz.support.api.ApiHelper;
 import trainingxyz.support.api.Endpoint;
 
-public class ReadProductsApi extends ApiHelper{
+public class ReadProductsApi extends ApiHelper {
 
     public Response get() {
         return get(Endpoint.READ.path);
+    }
+
+    public Response getWithOutLogging() {
+        return getWithoutLogging(Endpoint.READ.path);
     }
 }

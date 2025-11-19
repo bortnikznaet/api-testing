@@ -3,12 +3,12 @@
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout
-                    pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c{1} - %msg%n%throwable"/>
+                    pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c{3} - %msg%n%throwable"/>
         </Console>
 
         <ReportPortalLog4j2Appender name="ReportPortalAppender">
             <PatternLayout
-                    pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c{1} - %msg%n%throwable"/>
+                    pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c{3} - %msg%n%throwable"/>
         </ReportPortalLog4j2Appender>
 
         <File name="File"

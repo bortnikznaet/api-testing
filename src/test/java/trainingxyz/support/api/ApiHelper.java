@@ -59,4 +59,13 @@ public class ApiHelper {
                 .response();
     }
 
+    public Response getWithoutLogging(String endpoint) {
+        return given()
+                .noFilters()
+                .when()
+                .get(URL + endpoint)
+                .then()
+                .extract()
+                .response();
+    }
 }
