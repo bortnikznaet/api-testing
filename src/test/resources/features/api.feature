@@ -5,7 +5,7 @@ Feature: View CRUD endpoints of a demo PHP API (MAMP)
     When Send GET request to read product with id 1
     Then Status code should be 200
     And Product name should be "Bamboo Thermal Ski Coat"
-    And Product price should be 99
+    And Product price should be 100
 
 
   @CRUD2

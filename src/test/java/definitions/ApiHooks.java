@@ -22,12 +22,12 @@ public class ApiHooks {
                 new RequestLoggingFilter(LogDetail.ALL),
                 new ResponseLoggingFilter(LogDetail.ALL)
                 );
-        LOG.debug("Configuring RestAssured for API tests (reset + logging filters).");
+        LOG.info("Configuring RestAssured for API tests (reset + logging filters).");
     }
 
     @After
     public void resetConfigureRestAssured(){
         RestAssured.reset();
-        LOG.debug("RestAssured configuration reset after API test.");
+        LOG.info("RestAssured configuration reset after API test.");
     }
 }
