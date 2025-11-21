@@ -20,6 +20,7 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 public class ProductSteps {
     private static final Logger LOG = LogManager.getLogger(ProductSteps.class);
     private static final Gson GSON = new Gson();
@@ -37,55 +38,37 @@ public class ProductSteps {
 
     @When("Send GET request to read product with id {int}")
     public void sendGETRequestToReadProductWithId(int id) {
-        LOG.info("Sending GET request to read product with id={}", id);
+        LOG.debug("Sending GET request to read product with id={}", id);
         response = oneProductApi.get(id);
     }
 
     @Then("Status code should be {int}")
     public void thenStatusCodeShouldBe(int expectedStatusCode) {
         int actualStatusCode = response.statusCode();
-
-        try {
-            assertThat(actualStatusCode)
-                    .as("Expected HTTP status code to be %s but was %s", expectedStatusCode, actualStatusCode)
-                    .isEqualTo(expectedStatusCode);
-        } catch (AssertionError e) {
-            LOG.debug("Asserting HTTP status code: expected={}, actual={}", expectedStatusCode, actualStatusCode);
-            throw e;
-        }
-
+        assertThat(actualStatusCode)
+                .as("Expected HTTP status code to be %s but was %s", expectedStatusCode, actualStatusCode)
+                .isEqualTo(expectedStatusCode);
     }
 
     @And("Product name should be {string}")
     public void productNameShouldBe(String expectedName) {
         String actualName = response.jsonPath().getString("name");
-
-        try {
-            assertThat(actualName)
-                    .as("Expected product name to be '%s' but was '%s'", expectedName, actualName)
-                    .isEqualTo(expectedName);
-        } catch (AssertionError e) {
-            LOG.debug("Asserting product name: expected='{}', actual='{}'", expectedName, actualName);
-            throw new RuntimeException(e);
-        }
+        assertThat(actualName)
+                .as("Expected product name to be '%s' but was '%s'", expectedName, actualName)
+                .isEqualTo(expectedName);
     }
 
     @And("Product price should be {double}")
     public void productPriceShouldBe(double expectedPrice) {
         double actualPrice = response.jsonPath().getDouble("price");
-        try {
-            assertThat(actualPrice)
-                    .as("Expected product price to be %s but was %s", expectedPrice, actualPrice)
-                    .isEqualTo(expectedPrice);
-        } catch (AssertionError e) {
-            LOG.debug("Asserting product price: expected={}, actual={}", expectedPrice, actualPrice);
-            throw e;
-        }
+        assertThat(actualPrice)
+                .as("Expected product price to be %s but was %s", expectedPrice, actualPrice)
+                .isEqualTo(expectedPrice);
     }
 
     @When("Send GET request to read all products")
     public void sendGETRequestToReadAllProducts() {
-        LOG.info("Sending GET request to read all products");
+        LOG.debug("Sending GET request to read all products");
         response = allProductsApi.get();
         int size = response.jsonPath().getList("records").size();
 
@@ -94,7 +77,8 @@ public class ProductSteps {
 
     @When("Send GET request to read categories")
     public void sendGETRequestToReadCategories() {
-        LOG.info("Sending GET request to read all categories");
+        LOG.debug("Sending GET request to read all categories");
+
         response = categoriesApi.get();
         int size = response.jsonPath().getList("records").size();
 
@@ -121,9 +105,9 @@ public class ProductSteps {
                 product = new Product(name, description, price, categoryId);
                 LOG.info("Prepared product payload without id");
             }
-//            LOG.info("Prepared product payload: {}", GSON.toJson(product));
+            LOG.info("Prepared product payload: {}", GSON.toJson(product));
         } catch (Exception e) {
-            LOG.debug("Failed to prepare product payload. Input data: id='{}', name='{}', description='{}', price={}, categoryId={}",
+            LOG.error("Failed to prepare product payload. Input data: id='{}', name='{}', description='{}', price={}, categoryId={}",
                     id, name, description, price, categoryId, e);
             throw e;
         }
@@ -131,22 +115,24 @@ public class ProductSteps {
 
     @When("Send POST request to create product")
     public void sendPOSTRequestToCreateProduct() {
+        LOG.debug("Sending POST request to create product: {}", GSON.toJson(product));
         response = createProductApi.create(product);
     }
 
     @When("Send PUT request to update product")
     public void sendPUTRequestToUpdateProduct() {
 
-        LOG.info("Sending PUT request to update product: {}", GSON.toJson(product));
+        LOG.info("Sending PUT request to update product with id={}", product.getId());
+        LOG.debug("Product update payload: {}", GSON.toJson(product));
         response = updateProductApi.update(product);
 
     }
 
     @When("Send DELETE request to delete product")
     public void sendDELETERequestToDeleteProduct() {
-
-        LOG.info("Sending DELETE request to delete product with id={}", lastProductID.get().getId());
-        response = deleteProductApi.delete(lastProductID.get());
+        Product lastProduct = lastProductID.get();
+        LOG.info("Sending DELETE request to delete product with id={}",lastProduct.getId());
+        response = deleteProductApi.delete(lastProduct);
     }
 
     @And("Message should be {string}")
@@ -179,7 +165,5 @@ public class ProductSteps {
         assertThat(response.getHeader("Server"))
                 .as("Server header")
                 .contains("Apache/2.4.33");
-
-        LOG.info("Response headers for product read API are valid.");
     }
 }
