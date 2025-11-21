@@ -9,6 +9,7 @@
         <ReportPortalLog4j2Appender name="ReportPortalAppender">
             <PatternLayout
                     pattern="%d{HH:mm:ss.SSS} %-5level [%t] %c{3} - %msg%n%throwable"/>
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
         </ReportPortalLog4j2Appender>
 
         <File name="File"
@@ -26,5 +27,7 @@
             <AppenderRef ref="ReportPortalAppender"/>
             <AppenderRef ref="File"/>
         </Root>
+        <Logger name="definitions" level="debug" additivity="true"/>
+        <Logger name="com.epam.reportportal" level="info" additivity="true"/>
     </Loggers>
 </Configuration>
