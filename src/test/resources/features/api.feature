@@ -21,7 +21,7 @@ Feature: View CRUD endpoints of a demo PHP API (MAMP)
   Scenario: Update product
     Given Product payload is prepared
       | id | name                           | description                                                                                     | price | category_id |
-      | rr | Magnesium 250 mg (200 tablets) | Magnesium is critical to many bodily processes, and supports nerve, muscle, and heart function. | 22    | 2           |
+      | 17 | Magnesium 250 mg (200 tablets) | Magnesium is critical to many bodily processes, and supports nerve, muscle, and heart function. | 22    | 2           |
     When Send PUT request to update product
     And Message should be "Product updated"
     Then Status code should be 201
