@@ -1,0 +1,8 @@
+rp.endpoint=
+rp.api.key=
+rp.launch=
+rp.project=
+rp.description=Local run
+rp.attributes=env:local;component:ui
+rp.enable=true
+rp.reporting.async=true
