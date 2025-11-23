@@ -8,7 +8,8 @@ import static io.restassured.RestAssured.given;
 public class ApiHelper {
     final String HOST = "http://localhost";
     final String PORT = "8888";
-    final String URL = HOST + ":" + PORT;
+    final String BASE_URL = HOST + ":" + PORT;
+    final String URL = System.getProperty("baseUrl", BASE_URL);
 
     public Response get(String endpoint) {
         return given()
