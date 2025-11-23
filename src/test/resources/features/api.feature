@@ -4,8 +4,8 @@ Feature: View CRUD endpoints of a demo PHP API (MAMP)
   Scenario: Get product details by ID
     When Send GET request to read product with id 1
     And Product name should be "Bamboo Thermal Ski Coat"
-    And Product price should be 200
-    Then Status code should be 99
+    And Product price should be 99
+    Then Status code should be 200
 
   @CRUD2
   Scenario: Get all products
@@ -24,7 +24,7 @@ Feature: View CRUD endpoints of a demo PHP API (MAMP)
       | 17 | Magnesium 250 mg (200 tablets) | Magnesium is critical to many bodily processes, and supports nerve, muscle, and heart function. | 22    | 2           |
     When Send PUT request to update product
     And Message should be "Product updated"
-    Then Status code should be 201
+    Then Status code should be 200
 
   @CRUD5
   Scenario: Create product
