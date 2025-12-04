@@ -29,6 +29,7 @@ and includes both classic JUnit tests and BDD scenarios with Cucumber.
 - **AssertJ**
 - **Log4j2**
 - **ReportPortal** Java agent & logging libraries
+- **Lombok** (models / builders)
 
 OS: Windows / macOS / Linux
 

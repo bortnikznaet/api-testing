@@ -52,7 +52,9 @@ public class ProductSteps {
 
     @And("Product name should be {string}")
     public void productNameShouldBe(String expectedName) {
-        String actualName = response.jsonPath().getString("name");
+        Product actualProduct = response.as(Product.class);
+        String actualName = actualProduct.getName();
+
         assertThat(actualName)
                 .as("Expected product name to be '%s' but was '%s'", expectedName, actualName)
                 .isEqualTo(expectedName);
@@ -60,7 +62,9 @@ public class ProductSteps {
 
     @And("Product price should be {double}")
     public void productPriceShouldBe(double expectedPrice) {
-        double actualPrice = response.jsonPath().getDouble("price");
+        Product actualProduct = response.as(Product.class);
+        double actualPrice = actualProduct.getPrice();
+
         assertThat(actualPrice)
                 .as("Expected product price to be %s but was %s", expectedPrice, actualPrice)
                 .isEqualTo(expectedPrice);
@@ -97,14 +101,21 @@ public class ProductSteps {
         int categoryId = parseInt(row.get("category_id"));
 
         try {
+            Product.ProductBuilder builder = Product.builder()
+                    .name(name)
+                    .description(description)
+                    .price(price)
+                    .category_id(categoryId);
+
             if (id != null && !id.isEmpty()) {
                 int idValue = parseInt(id);
-                product = new Product(idValue, name, description, price, categoryId);
+                builder.id(idValue);
                 LOG.info("Prepared product payload with id: {}", idValue);
             } else {
-                product = new Product(name, description, price, categoryId);
                 LOG.info("Prepared product payload without id");
             }
+            this.product = builder.build();
+
             LOG.info("Prepared product payload: {}", GSON.toJson(product));
         } catch (Exception e) {
             LOG.error("Failed to prepare product payload. Input data: id='{}', name='{}', description='{}', price={}, categoryId={}",
@@ -125,13 +136,12 @@ public class ProductSteps {
         LOG.info("Sending PUT request to update product with id={}", product.getId());
         LOG.debug("Product update payload: {}", GSON.toJson(product));
         response = updateProductApi.update(product);
-
     }
 
     @When("Send DELETE request to delete product")
     public void sendDELETERequestToDeleteProduct() {
         Product lastProduct = lastProductID.get();
-        LOG.info("Sending DELETE request to delete product with id={}",lastProduct.getId());
+        LOG.info("Sending DELETE request to delete product with id={}", lastProduct.getId());
         response = deleteProductApi.delete(lastProduct);
     }
 
