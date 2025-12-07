@@ -14,13 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class Product {
-
+public class Category {
     private int id;
     private String name;
     private String description;
-    private double price;
-    private int categoryId;
-    private String categoryName;
-
 }

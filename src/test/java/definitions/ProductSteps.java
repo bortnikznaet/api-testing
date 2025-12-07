@@ -10,6 +10,9 @@ import io.restassured.response.Response;
 import models.Product;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import trainingxyz.support.api.model.AllProductsResponseModel;
+import trainingxyz.support.api.model.CategoriesResponseModel;
+import trainingxyz.support.api.model.UpdateResponseModel;
 import trainingxyz.support.api.service.LastProductService;
 import trainingxyz.support.api.v1.*;
 
@@ -20,13 +23,12 @@ import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 public class ProductSteps {
     private static final Logger LOG = LogManager.getLogger(ProductSteps.class);
     private static final Gson GSON = new Gson();
-
     Response response;
     Product product;
+
 
     ReadOneProductApi oneProductApi = new ReadOneProductApi();
     ReadProductsApi allProductsApi = new ReadProductsApi();
@@ -73,8 +75,10 @@ public class ProductSteps {
     @When("Send GET request to read all products")
     public void sendGETRequestToReadAllProducts() {
         LOG.debug("Sending GET request to read all products");
+
         response = allProductsApi.get();
-        int size = response.jsonPath().getList("records").size();
+        AllProductsResponseModel body = response.as(AllProductsResponseModel.class);
+        int size = (body.getRecords() == null) ? 0 : body.getRecords().size();
 
         LOG.info("GET All products finished and returned {} products", size);
     }
@@ -84,7 +88,9 @@ public class ProductSteps {
         LOG.debug("Sending GET request to read all categories");
 
         response = categoriesApi.get();
-        int size = response.jsonPath().getList("records").size();
+        CategoriesResponseModel body = response.as(CategoriesResponseModel.class);
+
+        int size = (body.getRecords() == null) ? 0 : body.getRecords().size();
 
         LOG.info("GET All categories finished and returned {} categories", size);
     }
@@ -105,7 +111,7 @@ public class ProductSteps {
                     .name(name)
                     .description(description)
                     .price(price)
-                    .category_id(categoryId);
+                    .categoryId(categoryId);
 
             if (id != null && !id.isEmpty()) {
                 int idValue = parseInt(id);
@@ -116,7 +122,7 @@ public class ProductSteps {
             }
             this.product = builder.build();
 
-            LOG.info("Prepared product payload: {}", GSON.toJson(product));
+            LOG.info("Prepared product payload: {}", GSON.toJson(this.product));
         } catch (Exception e) {
             LOG.error("Failed to prepare product payload. Input data: id='{}', name='{}', description='{}', price={}, categoryId={}",
                     id, name, description, price, categoryId, e);
@@ -126,7 +132,7 @@ public class ProductSteps {
 
     @When("Send POST request to create product")
     public void sendPOSTRequestToCreateProduct() {
-        LOG.debug("Sending POST request to create product: {}", GSON.toJson(product));
+        LOG.debug("Sending POST request to create product: {}", GSON.toJson(this.product));
         response = createProductApi.create(product);
     }
 
@@ -134,7 +140,7 @@ public class ProductSteps {
     public void sendPUTRequestToUpdateProduct() {
 
         LOG.info("Sending PUT request to update product with id={}", product.getId());
-        LOG.debug("Product update payload: {}", GSON.toJson(product));
+        LOG.debug("Product update payload: {}", GSON.toJson(this.product));
         response = updateProductApi.update(product);
     }
 
@@ -147,10 +153,10 @@ public class ProductSteps {
 
     @And("Message should be {string}")
     public void messageShouldBe(String expectedMessage) {
-        String actualMessage = response.jsonPath().getString("message");
+        UpdateResponseModel actualMessage = response.as(UpdateResponseModel.class);
 
-        assertThat(actualMessage)
-                .as("Expected massage to be %s but was %s", expectedMessage, actualMessage)
+        assertThat(actualMessage.getMessage())
+                .as("Expected message to be %s but was %s", expectedMessage, actualMessage.getMessage())
                 .isEqualTo(expectedMessage);
     }
 
