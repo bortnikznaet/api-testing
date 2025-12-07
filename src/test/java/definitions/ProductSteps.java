@@ -95,39 +95,14 @@ public class ProductSteps {
         LOG.info("GET All categories finished and returned {} categories", size);
     }
 
+    @Given("Product payload is prepared with id {int}")
+    public void productPayloadIsPreparedWithId(int id, DataTable dataTable) {
+        this.product = buildSingleProduct(dataTable, id);
+    }
+
     @Given("Product payload is prepared")
     public void productPayloadIsPrepared(DataTable dataTable) {
-        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-        Map<String, String> row = rows.get(0);
-
-        String id = row.get("id");
-        String name = row.get("name");
-        String description = row.get("description");
-        double price = parseDouble(row.get("price"));
-        int categoryId = parseInt(row.get("category_id"));
-
-        try {
-            Product.ProductBuilder builder = Product.builder()
-                    .name(name)
-                    .description(description)
-                    .price(price)
-                    .categoryId(categoryId);
-
-            if (id != null && !id.isEmpty()) {
-                int idValue = parseInt(id);
-                builder.id(idValue);
-                LOG.info("Prepared product payload with id: {}", idValue);
-            } else {
-                LOG.info("Prepared product payload without id");
-            }
-            this.product = builder.build();
-
-            LOG.info("Prepared product payload: {}", GSON.toJson(this.product));
-        } catch (Exception e) {
-            LOG.error("Failed to prepare product payload. Input data: id='{}', name='{}', description='{}', price={}, categoryId={}",
-                    id, name, description, price, categoryId, e);
-            throw e;
-        }
+        this.product = buildSingleProduct(dataTable, null);
     }
 
     @When("Send POST request to create product")
@@ -181,5 +156,55 @@ public class ProductSteps {
         assertThat(response.getHeader("Server"))
                 .as("Server header")
                 .contains("Apache/2.4.33");
+    }
+
+
+    private Product buildSingleProduct(DataTable dataTable, Integer idOverride) {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+        if (rows.isEmpty()) {
+            throw new IllegalArgumentException("Product DataTable is empty");
+        }
+        if (rows.size() != 1) {
+            throw new IllegalArgumentException("Expected exactly 1 product row, but got: " + rows.size());
+        }
+
+        Map<String, String> row = rows.iterator().next();
+        try {
+            Product.ProductBuilder builder = Product.builder()
+                    .name(require(row, "name"))
+                    .description(require(row, "description"))
+                    .price(parseDoubleSafe(require(row, "price")))
+                    .categoryId(parseIntSafe(require(row, "category_id")));
+
+            if (idOverride != null) {
+                builder.id(idOverride);
+                LOG.info("Prepared product payload (update). id={}, name='{}'", idOverride, row.get("name"));
+            } else {
+                LOG.info("Prepared product payload (create). name='{}'", row.get("name"));
+            }
+
+            return builder.build();
+
+        } catch (RuntimeException e) {
+            LOG.error("Failed to prepare product payload. Row={}", row, e);
+            throw e;
+        }
+    }
+
+    private String require(Map<String, String> row, String key) {
+        String val = row.get(key);
+        if (val == null || val.trim().isEmpty()) {
+            throw new IllegalArgumentException("Missing/empty required field: " + key);
+        }
+        return val.trim();
+    }
+
+    private int parseIntSafe(String val) {
+        return Integer.parseInt(val.trim());
+    }
+
+    private double parseDoubleSafe(String val) {
+        return Double.parseDouble(val.trim());
     }
 }
